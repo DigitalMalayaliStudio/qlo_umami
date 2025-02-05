@@ -10,7 +10,11 @@ A free module to add [Umami](https://github.com/umami-software/umami) analytics 
 ## Features
 - 💎 Simple - easy to setup!
 - 🛰️ Track back office - option to track your QloApps back office!
-- 🛠️ Tracker configuration - all the valid tracker configuration options for Umami are available! 
+- 🛠️ Tracker configuration - all the valid tracker configuration options for Umami are available!
+
+## Screenshots
+<img src="screenshots/screenshot (2).png" width="500" alt="screenshot"/>
+<img src="screenshots/screenshot (1).png" width="500" alt="screenshot"/>
 
 ## Installation
 1. Download the latest version of module from [Releases](https://github.com/DigitalMalayaliStudio/qlo_umami/releases)
