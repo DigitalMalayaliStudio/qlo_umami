@@ -23,7 +23,7 @@ class Qlo_Umami extends Module
     public function __construct()
     {
         $this->name = 'qlo_umami';
-        $this->version = '1.0.0';
+        $this->version = '1.0.1';
         $this->ps_versions_compliancy = ['min' => '1.6', 'max' => _PS_VERSION_];
         $this->author = 'Digital Malayali Studio';
         $this->bootstrap = true;
@@ -55,6 +55,8 @@ class Qlo_Umami extends Module
             $dataHostURL = Tools::getValue('DATA_HOST_URL');
             $dataTag = Tools::getValue('DATA_TAG');
             $dataAutoTrack = (int) Tools::getValue('DATA_AUTO_TRACK');
+            $dataExcludeSearch = (int) Tools::getValue('DATA_EXCLUDE_SEARCH');
+            $dataExcludeHash = (int) Tools::getValue('DATA_EXCLUDE_HASH');
             $trackBackofficeEnabled = (int) Tools::getValue('TRACK_BACKOFFICE');
 
             if (!$website || !Validate::isGenericName($website)) {
@@ -68,6 +70,8 @@ class Qlo_Umami extends Module
                 Configuration::updateValue('DATA_HOST_URL', $dataHostURL);
                 Configuration::updateValue('DATA_TAG', $dataTag);
                 Configuration::updateValue('DATA_AUTO_TRACK', $dataAutoTrack);
+                Configuration::updateValue('DATA_EXCLUDE_SEARCH', $dataExcludeSearch);
+                Configuration::updateValue('DATA_EXCLUDE_HASH', $dataExcludeHash);
                 Configuration::updateValue('TRACK_BACKOFFICE', $trackBackofficeEnabled);
 
                 $html .= $this->displayConfirmation($this->l('Configuration updated'));
@@ -148,6 +152,40 @@ class Qlo_Umami extends Module
                 ),
                 array(
                     'type' => 'switch',
+                    'label' => $this->l('Data Exclude Search'),
+                    'name' => 'DATA_EXCLUDE_SEARCH',
+                    'desc' => $this->l('Enable if you do not want to collect search parameters from the URL'),
+                    'is_bool' => true,
+                    'values' => array(
+                        array(
+                            'value' => 1,
+                            'label' => $this->l('Yes'),
+                        ),
+                        array(
+                            'value' => 0,
+                            'label' => $this->l('No'),
+                        ),
+                    ),
+                ),
+                array(
+                    'type' => 'switch',
+                    'label' => $this->l('Data Exclude Hash'),
+                    'name' => 'DATA_EXCLUDE_HASH',
+                    'desc' => $this->l('Enable if you do not want to collect hash value from the URL'),
+                    'is_bool' => true,
+                    'values' => array(
+                        array(
+                            'value' => 1,
+                            'label' => $this->l('Yes'),
+                        ),
+                        array(
+                            'value' => 0,
+                            'label' => $this->l('No'),
+                        ),
+                    ),
+                ),
+                array(
+                    'type' => 'switch',
                     'label' => $this->l('Enable Back Office Tracking'),
                     'name' => 'TRACK_BACKOFFICE',
                     'desc' => $this->l('Enable or disable the tracking inside the Back Office'),
@@ -180,6 +218,8 @@ class Qlo_Umami extends Module
         $helper->fields_value['DATA_HOST_URL'] = Configuration::get('DATA_HOST_URL');
         $helper->fields_value['DATA_TAG'] = Configuration::get('DATA_TAG');
         $helper->fields_value['DATA_AUTO_TRACK'] = Configuration::get('DATA_AUTO_TRACK');
+        $helper->fields_value['DATA_EXCLUDE_SEARCH'] = Configuration::get('DATA_EXCLUDE_SEARCH');
+        $helper->fields_value['DATA_EXCLUDE_HASH'] = Configuration::get('DATA_EXCLUDE_HASH');
         $helper->fields_value['TRACK_BACKOFFICE'] = Configuration::get('TRACK_BACKOFFICE');
 
         return $helper->generateForm($fieldsForm);
@@ -199,6 +239,8 @@ class Qlo_Umami extends Module
                 'data_host_url' => Configuration::get('DATA_HOST_URL'),
                 'data_tag' => Configuration::get('DATA_TAG'),
                 'data_auto_track' => Configuration::get('DATA_AUTO_TRACK'),
+                'data_exclude_search' => Configuration::get('DATA_EXCLUDE_SEARCH'),
+                'data_exclude_hash' => Configuration::get('DATA_EXCLUDE_HASH'),
             )
         );
 
@@ -215,6 +257,8 @@ class Qlo_Umami extends Module
                 'data_host_url' => Configuration::get('DATA_HOST_URL'),
                 'data_tag' => Configuration::get('DATA_TAG'),
                 'data_auto_track' => Configuration::get('DATA_AUTO_TRACK'),
+                'data_exclude_search' => Configuration::get('DATA_EXCLUDE_SEARCH'),
+                'data_exclude_hash' => Configuration::get('DATA_EXCLUDE_HASH'),
             ));
 
             return $this->display(__FILE__, 'qlo_umami.tpl');
@@ -236,6 +280,8 @@ class Qlo_Umami extends Module
             || !Configuration::updateValue('DATA_HOST_URL', '')
             || !Configuration::updateValue('DATA_TAG', '')
             || !Configuration::updateValue('DATA_AUTO_TRACK', 1)
+            || !Configuration::updateValue('DATA_EXCLUDE_SEARCH', 0)
+            || !Configuration::updateValue('DATA_EXCLUDE_HASH', 0)
             || !Configuration::updateValue('TRACK_BACKOFFICE', 0)
         ) {
             return false;
@@ -256,6 +302,8 @@ class Qlo_Umami extends Module
             || !Configuration::deleteByName('DATA_HOST_URL')
             || !Configuration::deleteByName('DATA_TAG')
             || !Configuration::deleteByName('DATA_AUTO_TRACK')
+            || !Configuration::deleteByName('DATA_EXCLUDE_SEARCH')
+            || !Configuration::deleteByName('DATA_EXCLUDE_HASH')
             || !Configuration::deleteByName('TRACK_BACKOFFICE')
         ) {
             return false;
